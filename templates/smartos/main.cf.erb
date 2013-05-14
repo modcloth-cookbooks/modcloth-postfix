@@ -1,0 +1,110 @@
+## -- Basics
+
+inet_interfaces = <%= node[:postfix][:inet_interfaces] %>
+mynetworks = <%= node[:postfix][:mynetworks] %>
+mail_owner = postfix
+setgid_group = maildrop
+smtp_helo_name = mail.modcloth.com
+
+## -- Paths
+
+home_mailbox = Maildir/
+command_directory = /opt/local/sbin
+daemon_directory = /opt/local/libexec/postfix
+mailq_path = /opt/local/bin/mailq
+newaliases_path = /opt/local/bin/newaliases
+queue_directory = /var/spool/postfix
+sendmail_path = /opt/local/sbin/sendmail
+
+## -- Miscellaneous
+masquerade_domains = modcloth.com
+smtp_generic_maps = hash:/opt/local/etc/postfix/generic
+masquerade_exceptions = root
+default_database_type = hash
+html_directory = no
+owner_request_special = no
+recipient_delimiter = +
+smtpd_banner = $myhostname ESMTP
+smtpd_delay_reject = yes
+smtpd_helo_required = yes
+soft_bounce = no
+strict_rfc821_envelopes = yes
+unknown_local_recipient_reject_code = 550
+
+## -- SASL
+
+smtp_sasl_auth_enable = yes
+relayhost = <%= node[:postfix][:relay_host] %>
+smtp_sasl_mechanism_filter = plain
+smtp_sasl_password_maps = hash:/opt/local/etc/postfix/sasl_passwd
+smtp_sasl_security_options = noanonymous
+smtp_pix_workarounds =
+
+## -- TLS
+
+smtpd_enforce_tls = yes
+smtpd_tls_cert_file = /opt/local/etc/postfix/selfsigned.pem
+smtpd_tls_key_file = /opt/local/etc/postfix/selfsigned.pem
+smtp_tls_CAfile = /opt/local/etc/postfix/cacert.pem
+smtpd_tls_loglevel = 1
+smtp_tls_security_level = may
+smtp_tls_note_starttls_offer = yes
+smtpd_use_tls = yes
+
+## -- Limits
+
+mailbox_size_limit = 102400000
+message_size_limit = 51200000
+queue_minfree = 76800000
+
+## -- Restrictions
+
+smtpd_client_restrictions =
+        permit_mynetworks,
+        permit_sasl_authenticated,
+        reject_unknown_reverse_client_hostname
+smtpd_helo_restrictions =
+        permit_mynetworks,
+        permit_sasl_authenticated,
+        reject_invalid_helo_hostname,
+        reject_non_fqdn_helo_hostname
+smtpd_sender_restrictions =
+        permit_mynetworks,
+        permit_sasl_authenticated,
+        reject_unlisted_sender,
+        reject_non_fqdn_sender,
+        reject_unknown_sender_domain
+smtpd_recipient_restrictions = 
+        permit_mynetworks,
+        permit_sasl_authenticated,
+        reject_unlisted_recipient,
+        reject_non_fqdn_recipient,
+        reject_unauth_destination,
+        reject_unknown_recipient_domain,
+        check_recipient_access hash:/opt/local/etc/postfix/filtered_domains
+smtpd_data_restrictions =
+        permit_mynetworks,
+        reject_unauth_pipelining,
+        permit_sasl_authenticated
+smtpd_end_of_data_restrictions =
+
+## -- Checks
+
+#body_checks = regexp:/opt/local/etc/postfix/maps/body_checks
+#header_checks = regexp:/opt/local/etc/postfix/maps/header_checks
+#mime_header_checks = regexp:/opt/local/etc/postfix/maps/mime_header_checks
+
+## -- Maps
+
+alias_maps = hash:/opt/local/etc/postfix/aliases
+alias_database = hash:/opt/local/etc/postfix/aliases
+canonical_maps = hash:/opt/local/etc/postfix/canonical
+recipient_canonical_maps = hash:/opt/local/etc/postfix/recipient_canonical
+sender_canonical_maps = hash:/opt/local/etc/postfix/sender_canonical
+virtual_alias_maps = hash:/opt/local/etc/postfix/virtual
+
+## -- Mailman (enable if used)
+
+#relay_domains = hash:/opt/local/etc/postfix/maillists
+#transport_maps = hash:/opt/local/etc/postfix/transport
+#mailman_destination_recipient_limit = 1

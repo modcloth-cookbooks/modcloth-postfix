@@ -1,0 +1,15 @@
+= DESCRIPTION:
+
+Configures Postfix.
+
+= REQUIREMENTS: 
+
+== Platform:
+
+Joyent SmartOS >= 3.0.4
+
+== Cookbooks:
+
+= ATTRIBUTES: 
+
+= USAGE:
