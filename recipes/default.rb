@@ -10,6 +10,8 @@
 case node["platform"]
 when 'smartos'
   include_recipe "postfix::smartos"
+when 'centos'
+  include_recipe "postfix::centos"
 else
   include_recipe "postfix::ubuntu"
 end

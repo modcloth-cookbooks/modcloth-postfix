@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: postfix
-# Recipe:: default
+# Recipe:: ubuntu
 #
 # Copyright ModCloth, Inc.
 #
